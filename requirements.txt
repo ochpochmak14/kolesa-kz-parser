@@ -1,0 +1,14 @@
+PIP:
+
+beautifulsoup4 -- Version: 4.12.3
+requests -- 2.32.3
+pandas -- 2.2.2
+
+INPUT:
+
+Вводите оригинальные названия марок и моделей автомобилей, используя пробел в качестве разделителя в названии между 2 и более словами
+-----------------------------------------------------------------------------------------------------------------
+Enter the original names of car brands and models using a space as a separator in the name between 2 or more words
+
+
+
