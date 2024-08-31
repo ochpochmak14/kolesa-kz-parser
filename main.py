@@ -1,15 +1,12 @@
 from bs4 import BeautifulSoup
 import requests
-import csv
 import pandas as pd
-
-#url = "https://kolesa.kz/cars/"
-
 
 
 def correction_text(text: str) -> str:
     text = text.replace(" ", '-')
     return text.lower()
+
 
 class Car:
     mark = None
@@ -27,31 +24,32 @@ class Car:
 
     def print_data(self):
         car_options = {
-            'mark' : self.mark,
+            'mark': self.mark,
             'model': self.model,
-            'city' : self.city,
-            'start_price' : self.price1,
-            'finish_price' : self.price2,
+            'city': self.city,
+            'start_price': self.price1,
+            'finish_price': self.price2,
         }
         print("Car options: ")
         print(car_options)
 
 
-
 def get_data():
-
     mark = input("Enter mark of car: ")
     model = input("Enter model of car: ")
     city = input("Enter your city: ")
     price1 = int(input("Enter start price: "))
     price2 = int(input("Enter finish price: "))
-    my_car = Car(mark,model,city, price1, price2)
+    my_car = Car(mark, model, city, price1, price2)
 
     return my_car
+
 
 def main_url(car: Car) -> str:
     mainurl = f"https://kolesa.kz/cars/{car.mark.lower()}/{car.model.lower()}/{car.city.lower()}/?price%5Bfrom%5D={car.price1}&price%5Bto%5D={car.price2}&sort_by=year-desc" #&page={page}
     return mainurl
+
+
 def get_html(url: str):
     _html = requests.get(url).text
     soup = BeautifulSoup(_html, 'lxml')
@@ -68,10 +66,7 @@ def get_number_of_pages(soup) -> int:
         return int(pages[len(pages) - 1].text)
 
 
-def parser(car: Car, page_amount: int, main_url : str) -> None:
-    #mainurl = main_url(car)
-    #soup = get_html(mainurl)
-    #pages_quantity = get_number_of_pages()
+def parser(page_amount: int, main_url: str) -> None:
 
     my_data = []
     for page in range(1, page_amount):
@@ -95,27 +90,13 @@ def parser(car: Car, page_amount: int, main_url : str) -> None:
                 generation = pok.find('dd', class_="value").text
 
                 my_data.append([item_name, year, price, generation, link])
-                #city = my_soup2.findNext('dt', class_="value-title")
-                #print(item_name)
-                #print(city.text)
-                #print(year)
-                #print("https://kolesa.kz/" + str(link))
-                #print(dataa)
-                #print(price)
-                print()
-                print()
+                
             except AttributeError:
                 pass
 
-    df = pd.DataFrame(my_data, columns=['TITLE', 'YEAR', 'PRICE','GENERATION', 'LINK'])
+    df = pd.DataFrame(my_data, columns=['TITLE', 'YEAR', 'PRICE', 'GENERATION', 'LINK'])
     print(df)
-#parser()
-#x = requests.get("https://kolesa.kz/cars/toyota/camry/almaty/?year%5Bto%5D=2021&price%5Bfrom%5D=4000000&price%5Bto%5D=8000000&sort_by=year-desc").text
-#soup = BeautifulSoup(x, 'lxml')
-#x = get_number_of_pages(soup)
-#print(x)
 
-#print(correction_text("Land cruiser"))
 
 def main():
     try:
@@ -126,4 +107,6 @@ def main():
         parser(car, number_pages, mainurl)
     except Exception:
         print("--- Check your car characteristics) ---")
+        
+        
 main()
