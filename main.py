@@ -90,7 +90,7 @@ def parser(page_amount: int, main_url: str) -> None:
                 generation = pok.find('dd', class_="value").text
 
                 my_data.append([item_name, year, price, generation, link])
-                
+
             except AttributeError:
                 pass
 
@@ -104,9 +104,9 @@ def main():
         mainurl = main_url(car)
         souup = get_html(mainurl)
         number_pages = get_number_of_pages(souup)
-        parser(car, number_pages, mainurl)
+        parser(number_pages, mainurl)
     except Exception:
         print("--- Check your car characteristics) ---")
-        
-        
+
+
 main()
